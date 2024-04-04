@@ -1,4 +1,3 @@
-//okay na toh
 public class Author {
 
     String name;

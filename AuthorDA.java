@@ -1,46 +1,42 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class AuthorDA {
-    private HashMap<String, String> authorMap;
+    private HashMap<String, Author> authorMap;
 
     public AuthorDA() {
         this.authorMap = new HashMap<>();
-        // Initialize authorMap from file or database
-        populateAuthorMap();
-    }
 
-    private void populateAuthorMap() {
-        // Read Author.csv and populate authorMap
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Author.csv"))) {
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] authorData = line.split(",");
+        try (Scanner authorFile = new Scanner(new File("Author.csv"))) {
+            while (authorFile.hasNextLine()) {
+                String authorLineData = authorFile.nextLine();
+                String[] authorData = authorLineData.split(",");
                 if (authorData.length >= 2) {
                     String authorName = authorData[0].trim();
                     String bio = authorData[1].trim();
-                    addAuthor(authorName, bio);
-                } else {
-                    System.out.println("Incomplete data in line: " + line);
+                   
+                    Author author = new Author();
+                    author.setName(authorName);
+                    author.setBio(bio);
+                    addAuthor(authorName, author);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void addAuthor(String authorName, String bio) {
-        authorMap.put(authorName, bio);
+    public void addAuthor(String authorName, Author author) {
+        authorMap.put(authorName, author);
     }
 
-    public String getBioByAuthorName(String authorName) {
+    public Author getAuthorByAuthorName(String authorName) {
         return authorMap.get(authorName);
     }
 
-    // Method to get the author map
-    public HashMap<String, String> getAuthorMap() {
+    public HashMap<String, Author> getAuthorMap() {
         return authorMap;
     }
 }
