@@ -60,6 +60,7 @@ public class BookDA {
             String bio = author != null ? author.getBio() : ""; 
             System.out.println(isbn + " " + title);
             System.out.println("\t" + authorName + " - " + bio);
+            System.out.println();
         }
     }
 }
